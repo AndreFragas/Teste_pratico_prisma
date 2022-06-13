@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProjetoPrisma5.Repositório;
 
 namespace ProjetoPrisma5.Controllers
 {
@@ -6,11 +7,15 @@ namespace ProjetoPrisma5.Controllers
     [Route("api/projeto")]
     public class FormController : ControllerBase
     {
-        [HttpPost]
+        [HttpGet]
         public void teste(string email, string estado)
         {
             ManipularJson manipulador = new ManipularJson();
-            manipulador.ShowData(estado);
+            var modelito = manipulador.ShowData(estado);
+            ConverterModelo criaExcel = new ConverterModelo();
+            criaExcel.CriaPlanilhaExcel(modelito);
+            //EnviarEmail enviarEmail = new EnviarEmail();
+            //enviarEmail.EnviaMensagemComAnexos(email);
         }
     }
 }

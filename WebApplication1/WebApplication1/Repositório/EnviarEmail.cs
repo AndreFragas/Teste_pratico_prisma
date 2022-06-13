@@ -9,12 +9,12 @@ namespace ProjetoPrisma5
 {
     public class EnviarEmail
     {
-        public static bool ValidaEnderecoEmail(string enderecoEmail)
+        public bool ValidaEnderecoEmail(string email)
         {
             try
             {
                 //define a expressão regulara para validar o email
-                string texto_Validar = enderecoEmail;
+                string texto_Validar = email;
                 Regex expressaoRegex = new Regex(@"\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}");
 
                 // testa o email com a expressão
@@ -34,9 +34,13 @@ namespace ProjetoPrisma5
                 throw;
             }
         }
-        public static string EnviaMensagemComAnexos(string Destinatario, string Remetente,
-                                string Assunto, string enviaMensagem, ArrayList anexos)
+        public string EnviaMensagemComAnexos(string Destinatario)
         {
+            string Remetente = "fragas_quer_cafe@yahoo.com";
+            string Senha = "querocafe123*";
+            string Assunto = "Cidades";
+            string enviaMensagem = "";
+            string anexo = @"C:\Users\Pichau\Desktop\Nova pasta\Teste_pratico_prisma\WebApplication1\WebApplication1\Dados\teste.xlsx";
             try
             {
                 // valida o email
@@ -48,20 +52,18 @@ namespace ProjetoPrisma5
                 // Cria uma mensagem
                 MailMessage mensagemEmail = new MailMessage(
                    Remetente, Destinatario, Assunto, enviaMensagem);
-                // Obtem os anexos contidos em um arquivo arraylist e inclui na mensagem
-                foreach (string anexo in anexos)
-                {
-                    Attachment anexado = new Attachment(anexo, MediaTypeNames.Application.Octet);
-                    mensagemEmail.Attachments.Add(anexado);
-                }
+
+                // Adiciona o anexo;
+                Attachment anexado = new Attachment(anexo, MediaTypeNames.Application.Octet);
+                mensagemEmail.Attachments.Add(anexado);
 
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
                 client.EnableSsl = true;
-                NetworkCredential cred = new NetworkCredential("andrefragas14@gmail.com", "andre30fragas40");
+                NetworkCredential cred = new NetworkCredential(Remetente, Senha);
                 client.Credentials = cred;
 
                 // Inclui as credenciais
-                client.UseDefaultCredentials = true;
+                client.UseDefaultCredentials = false;
 
                 // envia a mensagem
                 client.Send(mensagemEmail);
